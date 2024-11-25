@@ -1,5 +1,6 @@
 'use client'
-import { useState,React } from "react";
+import React from 'react'
+import {useState} from "react";
 import { usePathname } from "next/navigation"; // For active state checking
 import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // Example icons
 import Image from "next/image";
