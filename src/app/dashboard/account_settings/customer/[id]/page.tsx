@@ -11,22 +11,22 @@ import { fetchRegisteredUsers } from '@/redux/features/user/userSlice'
 import React, { useEffect } from 'react'
 import Image from 'next/image'
 import Loader from "@/shared/Loader";
+import { RootState } from "@/redux/store";
 
 
 
 const UserDetails = ({params}: {params: Promise<{ id: number }>;}) => {
-    const {isLoading, isError, errorMsg, singleUser} = useAppSelector(state => state.user)
+    const {isLoading, isError, errorMsg, singleUser} = useAppSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch()
-    // const { id } = useParams();
     const { id } = React.use(params)
     const router = useRouter();
 
 
 
     useEffect(() => {
-      dispatch(fetchRegisteredUsers())
-      dispatch(getSingleUser(id));
-    },[dispatch, id])
+        dispatch(fetchRegisteredUsers())
+        dispatch(getSingleUser(id));
+    },[dispatch, id])   
    
 
     if(isLoading){
@@ -53,9 +53,9 @@ const UserDetails = ({params}: {params: Promise<{ id: number }>;}) => {
                 </span>
                 <div className="flex flex-col gap-8">
                     <ul className="space-y-2">
-                        <li className="font-bold text-[#151515] text-2xl">{singleUser.first_name} {singleUser.last_name}</li>
+                        <li className="font-bold text-[#151515] text-2xl">{singleUser?.first_name} {singleUser?.last_name}</li>
                         <li>{singleUser.is_active === true? <span className='bg-[#06D6A00D] rounded-lg px-2 py-1 text-sm text-[#2F4858]'>Active</span> : <span className='bg-[#F99E0B40] text-orange rounded-lg px-2 py-1 text-sm text-[#F99E0B]'>In-Active</span> }</li>
-                        <li className="text-[#B1B1B1] font-semibold text-xs">Referral Code: ARTSTOCKE_IFYSANNDRA24 </li>
+                        {/* <li className="text-[#B1B1B1] font-semibold text-xs">Referral Code: </li> */}
                     </ul>
                     <ul className="space-y-4 text-[#151515]">
                         <li className="uppercase text-[#8F8F8F] font-bold">Contact information</li>
@@ -116,7 +116,7 @@ const UserDetails = ({params}: {params: Promise<{ id: number }>;}) => {
         </div>
         <div>
             <p className="py-6 font-bold text-base text-[#333333]">Order History</p>
-            <p>NO record found!</p>
+            <p className="">No record found!</p>
         </div>
     </div>
   );

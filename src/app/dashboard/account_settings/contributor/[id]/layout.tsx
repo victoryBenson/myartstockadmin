@@ -10,6 +10,7 @@ import React, { useEffect } from 'react'
 import Image from 'next/image'
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { getSingleContributor } from '@/redux/features/contributor/contributorSlice';
+import Loader from '@/shared/Loader';
 
 
 
@@ -29,7 +30,7 @@ const ContributorDetailsLayout = ({children, params}: {children: React.ReactNode
 
 
   if(isLoading){
-    return <p>Loading...</p>
+    return <Loader/>
   }
 
   if(isError){
@@ -69,7 +70,7 @@ const ContributorDetailsLayout = ({children, params}: {children: React.ReactNode
                 <ul className="flex gap-8 justify-between bg-[#F9FCFF] border w-[217px] h-[84px] p-2 rounded-lg">
                     <li className="flex flex-col text-[#2F4858] text-2xl">
                         <span className="text-[#656565] text-sm">Completed Order</span>
-                        {singleContributor?.total_content_download || 0}
+                        {singleContributor?.orders?.total_content_download || 0}
                     </li>
                     <li>
                         <Image src={icon1} alt="icon1" width={40} quality={100}/>
@@ -78,7 +79,7 @@ const ContributorDetailsLayout = ({children, params}: {children: React.ReactNode
                 <ul className="flex gap-8 justify-between bg-[#92FF8840] text-[#1F7617] border w-[217px] h-[84px] p-2 rounded-lg">
                     <li className="flex flex-col text-[#2F4858] text-2xl">
                         <span className="text-[#656565] text-sm">Processed Order</span>
-                        {singleContributor?.total_content_download || 0}
+                        {singleContributor?.orders?.total_amount_spent|| 0}
                     </li>
                     <li>
                         <Image src={icon1} alt="icon1" width={40} quality={100}/>
@@ -87,7 +88,7 @@ const ContributorDetailsLayout = ({children, params}: {children: React.ReactNode
                 <ul className="flex gap-8 justify-between bg-[#F9FCFF] border w-[217px] h-[84px] p-2 rounded-lg">
                     <li className="flex flex-col text-[#2F4858] text-2xl">
                         <span className="text-[#656565] text-sm">Pending Order</span>
-                        {singleContributor?.total_content_download || 0}
+                        {singleContributor?.orders?.total_content_download || 0}
                     </li>
                     <li>
                         <Image src={icon1} alt="icon1" width={40} quality={100}/>

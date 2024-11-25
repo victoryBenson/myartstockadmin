@@ -10,6 +10,7 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import profileImage from '../../../../../public/assets/profile-image.png'
 import Image from 'next/image'
 import Link from 'next/link'
+import Loader from '@/shared/Loader'
 
 const Page = () => {
     const {isLoading, isError, users:data} = useAppSelector(state => state.user);
@@ -29,7 +30,7 @@ const Page = () => {
     },[dispatch])
 
     if(isLoading){
-      return <p>Loading...</p>
+      return <Loader/>
     }
 
     if(isError){
@@ -104,7 +105,7 @@ const Page = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    { !filteredData.length > 0 && !isLoading?
+                    { !filteredData && !isLoading?
                     <tr className='py-5 font-bold text-[#333333]'>
                         <td className='py-4 px-4 text-center'>No matching data found</td>
                     </tr> 

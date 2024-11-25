@@ -9,7 +9,7 @@ const initialState: DataState = {
     isError: false,
     errorMsg: "",
     users: [],
-    singleUser: []
+    singleUser: null
 };
 
 
@@ -73,7 +73,7 @@ const userSlice = createSlice({
         .addCase(getSingleUser.pending, (state) => {
             state.isLoading = true
         })
-        .addCase(getSingleUser.fulfilled, (state, {payload}:PayloadAction<UserState[]>) => {
+        .addCase(getSingleUser.fulfilled, (state, {payload}:PayloadAction<UserState>) => {
             state.isLoading = false;
             state.singleUser = payload;
             console.log(state.singleUser)

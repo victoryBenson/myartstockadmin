@@ -16,6 +16,10 @@ export interface UserState {
     gender: string;
     profile_image?: string;
     is_active?: boolean;
+    orders: {
+        total_content_download: number
+        total_amount_spent: number
+    };
 }
 
 export interface DataState {
@@ -23,7 +27,7 @@ export interface DataState {
     isError?: boolean,
     users: UserState[],
     errorMsg?: string,
-    singleUser: UserState[]
+    singleUser: UserState | null
 }
 
 
@@ -36,14 +40,18 @@ export interface VendorProps {
     status?: string,
     personnel_name: string
     type?: string
-    is_active?: boolean
+    is_active?: boolean;
+    orders?: {
+        total_content_download: number
+        total_amount_spent: number
+    };
 }
 
 export interface VendorState {
     isLoading: boolean,
     isError?: boolean,
     vendors: VendorProps[],
-    singleVendor: VendorProps[]
+    singleVendor: VendorProps | null,
     errorMsg?: string,
 }
 
@@ -52,7 +60,7 @@ export interface ContributorProps {
     id: number,
     country?: string,
     status?: string,
-    personnel_name: string
+    personnel_name?: string
     type?: string
     first_name: string;
     last_name:string;
@@ -61,12 +69,16 @@ export interface ContributorProps {
     gender: string;
     profile_image?: string;
     is_active?: boolean;
+    orders?: {
+        total_content_download: number
+        total_amount_spent: number
+    };
 }
 
 export interface ContributorState {
     isLoading: boolean,
     isError?: boolean,
     contributors: ContributorProps[],
-    singleContributor: ContributorProps[]
+    singleContributor: ContributorProps | null
     errorMsg?: string,
 }

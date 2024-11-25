@@ -9,7 +9,7 @@ const initialState: ContributorState = {
     isError: false,
     errorMsg: "",
     contributors: [],
-    singleContributor:  []
+    singleContributor:  null
 };
 
 
@@ -74,7 +74,7 @@ const contributorSlice = createSlice({
          .addCase(getSingleContributor.pending, (state) => {
             state.isLoading = true
         })
-        .addCase(getSingleContributor.fulfilled, (state, {payload}:PayloadAction<ContributorProps[]>) => {
+        .addCase(getSingleContributor.fulfilled, (state, {payload}:PayloadAction<ContributorProps>) => {
             state.isLoading = false;
             state.singleContributor = payload;
             console.log(state.singleContributor) 

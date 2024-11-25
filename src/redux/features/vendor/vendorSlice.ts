@@ -9,7 +9,7 @@ const initialState: VendorState = {
     isError: false,
     errorMsg: "",
     vendors: [],
-    singleVendor: []
+    singleVendor: null
 };
 
 
@@ -74,7 +74,7 @@ const vendorSlice = createSlice({
          .addCase(getSingleVendor.pending, (state) => {
             state.isLoading = true
         })
-        .addCase(getSingleVendor.fulfilled, (state, {payload}:PayloadAction<VendorProps[]>) => {
+        .addCase(getSingleVendor.fulfilled, (state, {payload}:PayloadAction<VendorProps>) => {
             state.isLoading = false;
             state.singleVendor = payload;
             console.log(state.singleVendor)
