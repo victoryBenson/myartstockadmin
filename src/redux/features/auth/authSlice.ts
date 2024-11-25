@@ -17,7 +17,7 @@ const initialState: AuthState = {
 //loginUser
 export const loginUser = createAsyncThunk(
     'auth/login',
-    async(userData, thunkAPI) => {
+    async(userData: unknown, thunkAPI) => {
         try {
             return await authService.login(userData)
         }catch(error){

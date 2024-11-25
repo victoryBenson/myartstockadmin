@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { FcGoogle } from 'react-icons/fc';
 import { LuEye, LuEyeOff} from 'react-icons/lu';
 import { RiCheckboxBlankLine } from 'react-icons/ri';
@@ -31,7 +31,7 @@ const Login = () => {
         setViewPwd(!viewPwd)    
      };
 
-     const handleChange = (e) => {
+     const handleChange = (e:ChangeEvent<HTMLInputElement>) => {
         const {name, value} = e.target;
         setFormState({...formState, [name]: value})
     }
