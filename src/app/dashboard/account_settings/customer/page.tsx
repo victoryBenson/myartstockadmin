@@ -105,7 +105,7 @@ const Page = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    { !filteredData.length > 0 && !isLoading?
+                    { !filteredData && !isLoading?
                     <tr className='py-5 flex justify-center items-center font-bold text-[#333333] relative'>
                         <td className='py-4 px-4 text-center'>No matching data found</td>
                     </tr> 
