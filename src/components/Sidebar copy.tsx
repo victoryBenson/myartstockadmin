@@ -1,14 +1,10 @@
 'use client'
 import { useState } from "react";
 import { usePathname } from "next/navigation"; // For active state checking
-import { FaHome, FaCog, FaUser, FaChevronDown, FaChevronUp } from "react-icons/fa"; // Example icons
+import { FaCog, FaUser, FaChevronDown, FaChevronUp } from "react-icons/fa"; // Example icons
 import Logo from "@/shared/Logo";
 import Image from "next/image";
-import icon1 from '../../public/assets/dashboardIcon.png'
-import icon2 from '../../public/assets/orderIcon.png'
-import icon3 from '../../public/assets/wallet-02.png'
-import icon4 from '../../public/assets/store-03.png'
-import icon5 from '../../public/assets/user-group.png'
+
 
 
 const menuItems = [

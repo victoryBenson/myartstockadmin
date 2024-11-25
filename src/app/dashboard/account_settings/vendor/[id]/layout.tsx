@@ -6,7 +6,7 @@ import profileImage from '../../../../../../public/assets/profile-image.png'
 import icon1 from '../../../../../../public/assets/410.png'
 import icon2 from '../../../../../../public/assets/Mask group.png'
 import { TbCurrencyNaira } from "react-icons/tb";
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect } from 'react'
 import Image from 'next/image'
 import { getSingleVendor } from "@/redux/features/vendor/vendorSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
