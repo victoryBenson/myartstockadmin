@@ -13,7 +13,7 @@ import { getSingleContributor } from '@/redux/features/contributor/contributorSl
 
 
 
-const ContributorDetailsLayout = ({children, params}: {children: React.ReactNode; params: Promise<{ id: string }>}) => {
+const ContributorDetailsLayout = ({children, params}: {children: React.ReactNode; params: Promise<{ id: number }>}) => {
     const { id } = React.use(params)
     const pathname = usePathname();
     const {isLoading, isError, errorMsg, singleContributor} = useAppSelector(state => state.contributor)
@@ -22,7 +22,9 @@ const ContributorDetailsLayout = ({children, params}: {children: React.ReactNode
 
     
   useEffect(() => {
-    dispatch(getSingleContributor(id));
+    if(id){
+        dispatch(getSingleContributor(id));
+    }
   }, [dispatch, id]);
 
 

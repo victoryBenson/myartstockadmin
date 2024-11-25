@@ -32,7 +32,7 @@ export const fetchRegisteredUsers = createAsyncThunk(
 // getSingleUser
 export const getSingleUser = createAsyncThunk(
     'user/getSingleUser',
-    async(userId, thunkAPI) => {
+    async(userId: number, thunkAPI) => {
         try {
             return await userService.getSingleUser(userId)
         }catch(error){

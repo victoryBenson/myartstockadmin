@@ -32,7 +32,7 @@ export const fetchContributor = createAsyncThunk(
 // getSingleContributor
 export const getSingleContributor = createAsyncThunk(
     'contributor/getSingleContributor',
-    async(userId, thunkAPI) => {
+    async(userId: number, thunkAPI) => {
         try {
             return await contributorService.getSingleContributor(userId)
         }catch(error){

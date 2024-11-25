@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 
 
-const VendorDetailsLayout = ({children, params}: {children: React.ReactNode; params: Promise<{ id: string }>;}) => {
+const VendorDetailsLayout = ({children, params}: {children: React.ReactNode; params: Promise<{ id: number }>;}) => {
     const { id } = React.use(params)
     const pathname = usePathname();
     const {isLoading, isError, errorMsg, singleVendor} = useAppSelector(state => state.vendor)

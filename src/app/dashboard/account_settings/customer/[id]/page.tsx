@@ -1,7 +1,7 @@
 'use client'
 import { getSingleUser } from "@/redux/features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { MdArrowBackIosNew } from "react-icons/md";
 import profileImage from '../../../../../../public/assets/profile-image.png'
 import icon1 from '../../../../../../public/assets/410.png'
@@ -10,14 +10,17 @@ import { TbCurrencyNaira } from "react-icons/tb";
 import { fetchRegisteredUsers } from '@/redux/features/user/userSlice'
 import React, { useEffect } from 'react'
 import Image from 'next/image'
+import Loader from "@/shared/Loader";
 
 
 
-const UserDetails = () => {
+const UserDetails = ({params}: {params: Promise<{ id: number }>;}) => {
     const {isLoading, isError, errorMsg, singleUser} = useAppSelector(state => state.user)
     const dispatch = useAppDispatch()
-    const { id } = useParams();
+    // const { id } = useParams();
+    const { id } = React.use(params)
     const router = useRouter();
+
 
 
     useEffect(() => {
@@ -27,7 +30,7 @@ const UserDetails = () => {
    
 
     if(isLoading){
-        return <p>Loading...</p>
+        return <Loader/>
     }
 
     if(isError){

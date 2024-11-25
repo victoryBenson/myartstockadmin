@@ -32,7 +32,7 @@ export const fetchVendors = createAsyncThunk(
 // getSingleVendor
 export const getSingleVendor = createAsyncThunk(
     'vendor/getSingleVendor',
-    async(userId, thunkAPI) => {
+    async(userId: number, thunkAPI) => {
         try {
             return await vendorService.getSingleVendor(userId)
         }catch(error){
