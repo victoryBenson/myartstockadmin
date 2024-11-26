@@ -3,13 +3,13 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit"
 import authService from './authServices';
 
 
-const token = localStorage.getItem("token");
+// const token = localStorage.getItem("token");
 
 const initialState: AuthState = {
     isLoading: false,
     isError: false,
     token: null,
-    isAuthenticated: !!token,
+    // isAuthenticated: !!token,
     errorMsg: ""
 };
 
@@ -40,20 +40,23 @@ const authSlice = createSlice({
         //     state.isError = false;
         //     state.user = []
         // },
-        loadToken: (state) => {
-            const token = localStorage.getItem("token");
-            if (token) {
-              state.token = token;
-              state.isAuthenticated = true;
-            }
-          },
+        // loadToken: (state) => {
+        //     const token = localStorage.getItem("token");
+        //     if (token) {
+        //       state.token = token;
+        //       state.isAuthenticated = true;
+        //     }
+        //   },
         logout: (state) => {
             state.token = null;
-            state.isAuthenticated = false;
+            // state.isAuthenticated = false;
             state.isLoading = false;
             state.isError = false;
             state.errorMsg = "";
-            localStorage.removeItem("token");
+            if (typeof window !== 'undefined') {
+                // localStorage.setItem('auth', JSON.stringify(action.payload));
+                localStorage.removeItem("token");
+              }
           },
     },
     extraReducers:(builder) => {
@@ -65,16 +68,19 @@ const authSlice = createSlice({
         })
         .addCase(loginUser.fulfilled, (state, {payload}:PayloadAction<string>) => {
             state.token = payload;
-            state.isAuthenticated = true;
+            // state.isAuthenticated = true;
             state.isLoading = false;
-            localStorage.setItem("token", payload);
+            if (typeof window !== 'undefined') {
+                // localStorage.setItem('token', JSON.stringify(action.payload));
+                localStorage.setItem("token", payload);
+              }
             console.log(payload)
             console.log(`${state.token}`)
         })
         .addCase(loginUser.rejected, (state, {payload}:PayloadAction<unknown>) => {
             state.isLoading = false;
             state.isError = true;
-            state.isAuthenticated = false
+            // state.isAuthenticated = false
             state.errorMsg = payload as string;
             console.log(state.errorMsg)
         })
@@ -82,5 +88,5 @@ const authSlice = createSlice({
 })
 
 
-export const {logout, loadToken} = authSlice.actions;
+export const {logout} = authSlice.actions;
 export default authSlice.reducer

@@ -5,9 +5,10 @@ const axiosInstance = axios.create({
   baseURL: 'https://staging.pekadis.com',
 });
 
-// Add a request interceptor
+
 axiosInstance.interceptors.request.use(
   (config) => {
+    
     const token = localStorage.getItem("token");
     
     if (token) {

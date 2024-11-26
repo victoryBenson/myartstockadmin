@@ -2,7 +2,7 @@ export interface AuthState {
     token: string | null;
     isLoading: boolean,
     isError : boolean,
-    isAuthenticated: boolean;
+    isAuthenticated?: boolean;
     errorMsg: string
 }
 
