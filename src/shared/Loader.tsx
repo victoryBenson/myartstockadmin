@@ -5,9 +5,9 @@ const Loader = () => {
   return (
     <div className='flex flex-col h-screen justify-center items-center'>
         <span className='animate-spin'>
-            <TbLoaderQuarter />
+            <TbLoaderQuarter size={20} />
         </span>
-        please wait...
+        Please Wait...
     </div>
   )
 }
