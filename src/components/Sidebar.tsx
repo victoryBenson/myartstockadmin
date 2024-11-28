@@ -23,14 +23,14 @@ const menuItems = [
   {
     label: "Order Management",
     children: [
-        { label: 'Digital Product', path: '/' },
-        { label: 'Physical Product', path: '/' },
+        { label: 'Digital Product', path: '/dashboard/orders/digital' },
+        { label: 'Physical Product', path: '/dashboard/orders/physical' },
       ],
       icon: <Image src={icon2} alt='image'/>
   },
   {
     label: 'Wallet', 
-    path: '/', 
+    path: '/dashboard/wallet', 
     icon: <Image src={icon3} alt='image'/>
   },
   {   label: 'Assets Management', 
@@ -46,6 +46,8 @@ const menuItems = [
     icon: <Image src={icon5} alt='image'/>
   },
 ];
+
+
 
 export default function Sidebar() {
   const pathname = usePathname(); 
@@ -77,7 +79,7 @@ export default function Sidebar() {
                     // Single-level menu item
                     <a
                     href={item.path}
-                    className={`flex items-center p-2 rounded hover:bg-gray-100/40 hover:shadow ${
+                    className={`flex items-center p-2 rounded hover:bg-[#EAEAEA] hover:text-black hover:shadow transition-all duration-300 ${
                         isActive(item.path) ? "bg-gray-700" : ""
                     }`}
                     >
@@ -89,7 +91,7 @@ export default function Sidebar() {
                     <div className="">
                     <button
                         onClick={() => toggleSubmenu(item.label)}
-                        className="flex items-center w-full p-2 rounded hover:bg-gray-100/40 hover:shadow"
+                        className="flex items-center w-full p-2 rounded hover:bg-[#EAEAEA] hover:text-black hover:shadow transition-all duration-300"
                     >
                         <span className="mr-3">{item.icon}</span>
                         <span className="text-base">{item.label}</span>
@@ -105,7 +107,7 @@ export default function Sidebar() {
                             <a
                             key={subItem.label}
                             href={subItem.path}
-                            className={`block p-2 rounded hover:bg-gray-100/40 hover:shadow ${
+                            className={`block p-2 rounded hover:bg-[#EAEAEA] hover:text-black hover:shadow transition-all duration-300 ${
                                 isActive(subItem.path) ? "#EAEAEA" : ""
                             }`}
                             >

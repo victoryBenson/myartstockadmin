@@ -10,7 +10,10 @@ const Navbar = () => {
     const displayPathname = pathname === '/dashboard' ? 'Dashboard' 
     : pathname.includes('/dashboard/account_settings/customer') ? 'Customer Management' 
     : pathname.includes('/dashboard/account_settings/vendor') ? 'Vendor Management' 
-    : pathname.includes('/dashboard/account_settings/contributor') ? 'Contributor Management'  
+    : pathname.includes('/dashboard/account_settings/contributor') ? 'Contributor Management' 
+    : pathname.includes('/dashboard/wallet') ? 'Wallet Management'  
+    : pathname.includes('/dashboard/assets_management') ? 'Assets Management' 
+    : pathname.includes('/dashboard/orders') ? 'Order Management'  
     : pathname
 
   return (

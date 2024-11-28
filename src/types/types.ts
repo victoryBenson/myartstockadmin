@@ -82,3 +82,22 @@ export interface ContributorState {
     singleContributor: ContributorProps | null
     errorMsg?: string,
 }
+
+
+//orders
+export interface OrderProps {
+    email?: string,
+    sku?: string,
+    status?: string,
+    description?: string,
+    total_amount?: number,
+    date_assigned?: string
+}
+
+
+export interface OrderState {
+    isLoading: boolean,
+    isError?: boolean,
+    orders: OrderProps[],
+    errorMsg?: string,
+}
