@@ -4,14 +4,17 @@ import authReducer from './features/auth/authSlice'
 import userReducer from './features/user/userSlice'
 import vendorReducer from './features/vendor/vendorSlice'
 import contributorReducer from './features/contributor/contributorSlice'
-
+import orderReducer from './features/orders/orderSlice'
+import assetReducer from './features/asset_management/assetSlice'
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
     vendor: vendorReducer,
-    contributor: contributorReducer
+    contributor: contributorReducer,
+    order: orderReducer,
+    assets: assetReducer
   },
 
 });

@@ -1,8 +1,8 @@
-import React from 'react'
+import { redirect } from 'next/navigation'
 
 const Page = () => {
   return (
-    <div className='p-5'>No record yet!</div>
+   redirect(`/dashboard/asset_management/upload_request`)
   )
 }
 

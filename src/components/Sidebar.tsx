@@ -14,45 +14,53 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 
 
-const menuItems = [
-  {
-    label: "Dashboard",
-    path: "/",
-    icon: <Image src={icon1} alt='image'/>,
-  },
-  {
-    label: "Order Management",
-    children: [
-        { label: 'Digital Product', path: '/dashboard/orders/digital' },
-        { label: 'Physical Product', path: '/dashboard/orders/physical' },
-      ],
-      icon: <Image src={icon2} alt='image'/>
-  },
-  {
-    label: 'Wallet', 
-    path: '/dashboard/wallet', 
-    icon: <Image src={icon3} alt='image'/>
-  },
-  {   label: 'Assets Management', 
-    path: '/',
-    icon: <Image src={icon4} alt='image'/> },
-{
-    label: 'Account Management',
-    children: [
-      { label: 'Customer Management', path: '/dashboard/account_settings' },
-      { label: 'Contributor Management', path: '/dashboard/account_settings/contributor' },
-      { label: 'Vendor Management', path: '/dashboard/account_settings/vendor' },
-    ],
-    icon: <Image src={icon5} alt='image'/>
-  },
-];
-
 
 
 export default function Sidebar() {
   const pathname = usePathname(); 
   const [openMenus, setOpenMenus] = useState<string[]>([]);
 
+
+  const menuItems = [
+    {
+      label: "Dashboard",
+      path: "/",
+      icon: <Image src={icon1} alt='image'/>,
+    },
+    {
+      label: "Order Management",
+      children: [
+          { label: 'Frame', path: '/dashboard/orders/frame' },
+          { label: 'Canvas', path: '/dashboard/orders/canvas' },
+          { label: 'Assets', path: '/dashboard/orders/asset' },
+        ],
+        icon: <Image src={icon2} alt='image'/>
+    },
+    {
+      label: 'Wallet', 
+      path: '/dashboard/wallet', 
+      icon: <Image src={icon3} alt='image'/>
+    },
+    {
+      label: "Assets Management",
+      children: [
+          { label: 'Upload Request', path: '/dashboard/assets_management/upload_request' },
+          { label: 'Product Category', path: '/dashboard/assets_management/upload_request' },
+          { label: 'Frames', path: '/dashboard/assets_management/upload_request' },
+          { label: 'Merchandise', path: '/dashboard/assets_management/upload_request' },
+        ],
+        icon: <Image src={icon2} alt='image'/>
+    },
+  {
+      label: 'Account Management',
+      children: [
+        { label: 'Customer Management', path: '/dashboard/account_settings' },
+        { label: 'Contributor Management', path: '/dashboard/account_settings/contributor' },
+        { label: 'Vendor Management', path: '/dashboard/account_settings/vendor' },
+      ],
+      icon: <Image src={icon5} alt='image'/>
+    },
+  ];
   
   const toggleSubmenu = (label: string) => {
     setOpenMenus((prev) =>

@@ -1,14 +1,12 @@
 'use client'
-// import { useParams } from 'next/navigation'
 import React from 'react'
 
-const AllContent = () => {
-  // const params = useParams();
-  // const userId = params.id
+const AllContent = ({params}: {params: Promise<{id: number}>}) => {
+  const {id} = React.use(params)
+
   return (
     <div>
-      {/* AllContent: {userId} */}
-      <p className='text-center font-bold'>No record found!</p>
+      <p className='text-center font-bold'>No record found! {id}</p>
     </div>
   )
 }
