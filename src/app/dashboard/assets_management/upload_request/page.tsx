@@ -1,4 +1,6 @@
 'use client'
+import ApprovedModal from '@/components/AppprovedModal';
+import DeclineModal from '@/components/DeclineModal';
 import PendingModal from '@/components/PendingModal';
 import { FetchAssets } from '@/redux/features/asset_management/assetSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -9,6 +11,7 @@ import { CiSearch } from 'react-icons/ci';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { LuFilter } from 'react-icons/lu';
 import { PiRadioButtonFill } from 'react-icons/pi';
+import { TbCurrencyNaira } from 'react-icons/tb';
 
 
 const Page = () => {
@@ -171,6 +174,7 @@ const Page = () => {
                             }
                             </tbody>
                         </table>
+                        {/* next and previous btn */}
                         <div className='flex justify-between items-center py-5 text-sm'>
                             <div>
                                 <label>
@@ -215,20 +219,191 @@ const Page = () => {
             )}
             {activeTab === 'approved' && (
                 <div>
-                    {filteredData.map(item => {
-                        return (
-                            <div key={item.id}>{item.description}</div>
-                        )
-                    })}
+                <div className='overflow-x-auto'>
+                     <table className='min-w-full bg-white border border-gray-200/40'>
+                         <thead>
+                             <tr className="bg-gray-100/40 text-[#C3C3C3] font-semibold text-xs">
+                                 <th className="py-4 px-4 text-left border-b">S/N</th>
+                                 <th className="py-4 px-4 text-left border-b">Content</th>
+                                 <th className="py-4 px-4 text-left border-b">Category</th>
+                                 <th className="py-4 px-4 text-left border-b">Amount</th>
+                                 <th className="py-4 px-4 text-left border-b">Upload Date</th>
+                                 <th className="py-4 px-4 text-left border-b">Status</th>
+                                 <th className="py-4 px-4 text-left border-b">Action</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             { !filteredData && !isLoading?
+                             
+                             <tr className='py-5 font-bold text-[#333333]'>
+                                 <td className='py-4 px-4 text-center'>No matching data found</td>
+                             </tr>
+                             :
+                             filteredData.map((item, index) => {
+                                 return (
+                                     <tr key={item.id} className='hover:bg-gray-50 text-[#333333] font-normal text-xs'>
+                                         <td className='py-2 px-4 border-b'>{index + 1}</td>
+                                         <td className='py-3 px-4 border-b'>{item.title}</td>
+                                         <td className='py-3 px-4 border-b'>{item?.meta?.category}</td>
+                                         <td className='py-3 px-4 border-b flex items-center'><TbCurrencyNaira />{item.pricing?.toLocaleString()}</td>
+                                         <td className='py-3 px-4 border-b'>{new Date(item?.updated_at).toLocaleDateString()}</td>
+                                         <td className='py-3 px-4 border-b flex items-center text-green-500 text-xs'><PiRadioButtonFill />{item?.status }</td>
+                                         <td className='py-2 px-4 border-b relative'>
+                                              <BsThreeDotsVertical onClick={ () => toggleMenu(item.id)}  className='cursor-pointer'/>
+                                             {viewMoreBtn === item.id && (
+                                                 <div className="absolute right-5 mt-2 w-40 bg-white shadow-lg rounded-lg z-10 text-[#333333]"> 
+                                                     <ul className="p-2 text-xs">
+                                                         <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">
+                                                             <button onClick={() => handleModalDetails(item)}>View Details</button>
+                                                         </li>
+                                                         <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Approve</li>
+                                                         <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Decline</li> 
+                                                     </ul>
+                                                 </div>
+                                             )}
+                                         </td>
+                                     </tr>
+                                 )
+                             })
+                         }
+                         </tbody>
+                     </table>
+                     {/* next and previous btn */}
+                     <div className='flex justify-between items-center py-5 text-sm'>
+                         <div>
+                             <label>
+                                 Show Rows:
+                                 <input
+                                 type="number"
+                                 min="1"
+                                 max="50"
+                                 value={rowsPerPage}
+                                 onChange={handleRowsPerPageChange}
+                                 style={{ width: "50px", marginLeft: "0.5rem" }}
+                                 className='text-[#6D6D6D]'
+                                 />
+                             </label>
+                         </div>
+                         <div className='flex items-center gap-2'>
+                             <button onClick={handlePrevious} disabled={currentPage === 1} className={`flex items-center gap-1 bg-[#B20021] text-white p-3 rounded-lg ${currentPage === 1 && 'bg-opacity-10'}`}>
+                                 <FaArrowLeft />
+                                 Previous
+                             </button>
+                             <span>
+                             {currentPage} 
+                             </span>
+                             <button onClick={handleNext} disabled={currentPage === totalPages} className={`flex items-center gap-1 bg-[#B20021] text-white p-3 rounded-lg ${currentPage === totalPages && 'bg-opacity-10'}`}>
+                                 Next
+                                 <FaArrowRight />
+                             </button>
+                         </div>
+                         <div>
+                             Showing {(currentPage - 1) * rowsPerPage + 1} to{" "}
+                             {Math.min(currentPage * rowsPerPage, totalRows)} of {totalRows} rows
+                         </div>
+                     </div>
+                     {/* open modal */}
+                     <div>
+                         {modal && (
+                             <ApprovedModal item={selectedItem} onClose={handleCloseModal}/>
+                         )}
+                     </div>
+                 </div>
                 </div>
             )}
             {activeTab === 'declined' && (
                 <div>
-                    {filteredData.map(item => {
-                        return (
-                            <div key={item.id}>{item.title}</div>
-                        )
-                    })}
+                    <div className='overflow-x-auto'>
+                     <table className='min-w-full bg-white border border-gray-200/40'>
+                         <thead>
+                             <tr className="bg-gray-100/40 text-[#C3C3C3] font-semibold text-xs">
+                                 <th className="py-4 px-4 text-left border-b">S/N</th>
+                                 <th className="py-4 px-4 text-left border-b">Content</th>
+                                 <th className="py-4 px-4 text-left border-b">Category</th>
+                                 {/* <th className="py-4 px-4 text-left border-b">Sub-Category</th> */}
+                                 <th className="py-4 px-4 text-left border-b">Amount</th>
+                                 <th className="py-4 px-4 text-left border-b">Upload Date</th>
+                                 <th className="py-4 px-4 text-left border-b">Status</th>
+                                 <th className="py-4 px-4 text-left border-b">Action</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             { !filteredData && !isLoading?
+                             
+                             <tr className='py-5 font-bold text-[#333333]'>
+                                 <td className='py-4 px-4 text-center'>No matching data found</td>
+                             </tr>
+                             :
+                             filteredData.map((item, index) => {
+                                 return (
+                                     <tr key={item.id} className='hover:bg-gray-50 text-[#333333] font-normal text-xs'>
+                                         <td className='py-2 px-4 border-b'>{index + 1}</td>
+                                         <td className='py-3 px-4 border-b'>{item.title}</td>
+                                         <td className='py-3 px-4 border-b'>{item?.meta?.category}</td>
+                                         <td className='py-3 px-4 border-b flex items-center'> <TbCurrencyNaira />{item.pricing?.toLocaleString()}</td>
+                                         <td className='py-3 px-4 border-b'>{new Date(item?.updated_at).toLocaleDateString()}</td>
+                                         <td className='py-3 px-4 border-b flex items-center text-red-500 text-xs'><PiRadioButtonFill />{item?.status }</td>
+                                         <td className='py-2 px-4 border-b relative'>
+                                              <BsThreeDotsVertical onClick={ () => toggleMenu(item.id)}  className='cursor-pointer'/>
+                                             {viewMoreBtn === item.id && (
+                                                 <div className="absolute right-5 mt-2 w-40 bg-white shadow-lg rounded-lg z-10 text-[#333333]"> 
+                                                     <ul className="p-2 text-xs">
+                                                         <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">
+                                                             <button onClick={() => handleModalDetails(item)}>View Details</button>
+                                                         </li>
+                                                         <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Approve</li>
+                                                         <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Decline</li> 
+                                                     </ul>
+                                                 </div>
+                                             )}
+                                         </td>
+                                     </tr>
+                                 )
+                             })
+                         }
+                         </tbody>
+                     </table>
+                     {/* next and previous btn */}
+                     <div className='flex justify-between items-center py-5 text-sm'>
+                         <div>
+                             <label>
+                                 Show Rows:
+                                 <input
+                                 type="number"
+                                 min="1"
+                                 max="50"
+                                 value={rowsPerPage}
+                                 onChange={handleRowsPerPageChange}
+                                 style={{ width: "50px", marginLeft: "0.5rem" }}
+                                 className='text-[#6D6D6D]'
+                                 />
+                             </label>
+                         </div>
+                         <div className='flex items-center gap-2'>
+                             <button onClick={handlePrevious} disabled={currentPage === 1} className={`flex items-center gap-1 bg-[#B20021] text-white p-3 rounded-lg ${currentPage === 1 && 'bg-opacity-10'}`}>
+                                 <FaArrowLeft />
+                                 Previous
+                             </button>
+                             <span>
+                             {currentPage} 
+                             </span>
+                             <button onClick={handleNext} disabled={currentPage === totalPages} className={`flex items-center gap-1 bg-[#B20021] text-white p-3 rounded-lg ${currentPage === totalPages && 'bg-opacity-10'}`}>
+                                 Next
+                                 <FaArrowRight />
+                             </button>
+                         </div>
+                         <div>
+                             Showing {(currentPage - 1) * rowsPerPage + 1} to{" "}
+                             {Math.min(currentPage * rowsPerPage, totalRows)} of {totalRows} rows
+                         </div>
+                     </div>
+                     {/* open modal */}
+                     <div>
+                         {modal && (
+                             <DeclineModal item={selectedItem} onClose={handleCloseModal}/>
+                         )}
+                     </div>
+                    </div>
                 </div>
             )}
         </div>
