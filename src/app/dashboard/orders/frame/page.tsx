@@ -1,71 +1,78 @@
 'use client'
-import { fetchRegisteredUsers } from '@/redux/features/user/userSlice'
-import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { truncateText } from '@/utils/utils'
+import { FetchOrders } from '@/redux/features/orders/orderSlice';
 import React, { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { CiSearch } from 'react-icons/ci'
 import { LuFilter } from 'react-icons/lu';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import profileImage from '../../../../../public/assets/profile-image.png'
-import Image from 'next/image'
 import Link from 'next/link'
 import Loader from '@/shared/Loader'
+// import UpdateStatus from '@/components/UpdateStatus';
 
 const Page = () => {
-    const {isLoading, isError, users:data, errorMsg} = useAppSelector(state => state.user);
-    const dispatch = useAppDispatch();
-    const [viewMoreBtn, setviewMoreBtn] = useState<number | null>(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
-    const [searchQuery, setSearchQuery] = useState("");
+  const dispatch = useAppDispatch();
+  const {isLoading, isError, errorMsg, orders:data} = useAppSelector(state => state.order)
+  const [viewMoreBtn, setviewMoreBtn] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchQuery, setSearchQuery] = useState("");
+//   const [modal, setModal] = useState(false)
+//   const [selectedItem, setSelectedItem] = useState()
 
-    
-    const toggleMenu = (id: number) => {
-        setviewMoreBtn(viewMoreBtn === id ? null : id);
-    };
+  
+//   const handleModal = (param: undefined) =>{
+//     setSelectedItem(param)
+//     setModal(!modal)
+//   }
 
-    useEffect(() => {
-      dispatch(fetchRegisteredUsers())
-    },[dispatch])
+  const toggleMenu = (id: number) => {
+      setviewMoreBtn(viewMoreBtn === id ? null : id);
+  };
 
-    if(isLoading){
-      return <Loader/>
-    }
+  useEffect(() => {
+    dispatch(FetchOrders())
+  },[dispatch])
 
-    if(isError){
-      return <p>{errorMsg}</p>
-    }
+  if(isLoading){
+    return <Loader/>
+  }
 
-    
-    const totalRows = data.length
-    const totalPages = Math.ceil(totalRows / rowsPerPage);
+  if(isError){
+    return <p>{errorMsg}</p>
+  }
 
-    const startIndex = (currentPage - 1) * rowsPerPage;
-    const displayData = data.slice(startIndex, startIndex + rowsPerPage);
+  
+  const totalRows = data.length
+  const totalPages = Math.ceil(totalRows / rowsPerPage);
 
-
-    const handleNext = () => {
-        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-    };
-
-    const handlePrevious = () => {
-        if (currentPage > 1) setCurrentPage(currentPage - 1);
-    };
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const displayData = data.slice(startIndex, startIndex + rowsPerPage);
 
 
-    // Filtered Data
-    const filteredData = displayData.filter((item) =>
-        item.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+  const handleNext = () => {
+      if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
-    const handleRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = Math.max(1, Math.min(100, Number(event.target.value)));
-        setRowsPerPage(value);
-        setCurrentPage(1); 
-    };
+  const handlePrevious = () => {
+      if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+
+  // Filtered Data
+  const filteredData = displayData.filter((item) =>
+      item?.customer?.first_name?.toLowerCase().includes(searchQuery.toLowerCase())
+    //   item.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    //   item?.email?.toLowerCase().includes(searchQuery?.toLowerCase())
+  );
+
+  const handleRowsPerPageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = Math.max(1, Math.min(100, Number(event.target.value)));
+      setRowsPerPage(value);
+      setCurrentPage(1); 
+  };
+
+ 
 
 
   return (
@@ -93,13 +100,14 @@ const Page = () => {
         <div className='overflow-x-auto'>
             <table className='min-w-full bg-white border border-gray-200/40'>
                 <thead>
-                    <tr className="bg-gray-100/40 text-[#C3C3C3] font-semibold text-xs">
+                    <tr className="bg-gray-100/40 text-[#998E8D] font-semibold text-xs">
                         <th className="py-4 px-4 text-left border-b">S/N</th>
-                        <th className="py-4 px-4 text-left border-b">Photo</th>
-                        <th className="py-4 px-4 text-left border-b">Name</th>
-                        <th className="py-4 px-4 text-left border-b">Gender</th>
-                        <th className="py-4 px-4 text-left border-b">Email Address</th>
-                        <th className="py-4 px-4 text-left border-b">Phone Number</th>
+                        <th className="py-4 px-4 text-left border-b">Order Number</th>
+                        <th className="py-4 px-4 text-left border-b">Customer Name</th>
+                        <th className="py-4 px-4 text-left border-b">Product Details</th>
+                        <th className="py-4 px-4 text-left border-b">Amount</th>
+                        <th className="py-4 px-4 text-left border-b">Date</th>
+                        <th className="py-4 px-4 text-left border-b">Assigned To</th>
                         <th className="py-4 px-4 text-left border-b">Status</th>
                         <th className="py-4 px-4 text-left border-b">Action</th>
                     </tr>
@@ -108,28 +116,32 @@ const Page = () => {
                     { !filteredData && !isLoading?
                     <tr className='py-5 flex justify-center items-center font-bold text-[#333333] relative'>
                         <td className='py-4 px-4 text-center'>No matching data found</td>
-                    </tr> 
-                    :
-                    filteredData.map((user, index) => {
+                    </tr>
+                    : 
+                    filteredData.map((item, index) => {
                         return (
-                            <tr key={user.id} className='hover:bg-gray-50 text-[#333333] font-normal text-xs'>
+                            <tr key={item.id} className='hover:bg-gray-50 text-[#333333] font-normal text-xs'>
                                 <td className='py-2 px-4 border-b'>{index + 1}</td>
-                                <td className='py-2 px-4 border-b flex items-center'>{user.profile_image? `${user.profile_image}` : <Image src={profileImage}   alt='image' className='rounded-full w-10 h-10 object-cover' quality={100} />}</td>
-                                <td className='py-2 px-4 border-b'>{user.first_name} {user.last_name}</td>
-                                <td className='py-2 px-4 border-b'>{user.gender ? user.gender : "null"}</td>
-                                <td className='py-2 px-4 border-b'>{truncateText(user.email, 10)}</td>
-                                <td className='py-2 px-4 border-b'>{user.phone_number ? user.phone_number : "null"}</td>
-                                <td className='py-2 px-4 border-b'>{user.is_active === true? <span className='bg-[#06D6A00D] rounded-lg px-2 py-1 text-xs text-[#2F4858]'>Active</span> : <span className='bg-[#F99E0B40] text-orange rounded-lg px-2 py-1 text-xs text-[#F99E0B]'>In-Active</span> }</td>
+                                <td className='py-2 px-4 border-b flex items-center'>{item.id}</td>
+                                <td className='py-2 px-4 border-b'>{item.customer?.first_name}</td>
+                                <td className='py-2 px-4 border-b'>{item?.items?.deliverable?.title}</td>
+                                <td className='py-2 px-4 border-b'>{item.total_amount?.toLocaleString()}</td>
+                                <td className='py-2 px-4 border-b flex flex-col'>
+                                    {/* <span>{new Date(item.created_at).toLocaleDateString()}</span> */}
+                                    {/* <span>{new Date(item.created_at).toLocaleTimeString()}</span> */}
+                                </td>
+                                <td className='py-2 px-4 border-b'>{item.date_assigned ? item.date_assigned : 'null'}</td>
+                                <td className='py-2 px-4 border-b'>{item.status}</td>
                                 <td className='py-2 px-4 border-b relative'>
-                                    <BsThreeDotsVertical onClick={ () => toggleMenu(user.id)}  className='cursor-pointer'/>
-                                    {viewMoreBtn === user.id && (
+                                    <BsThreeDotsVertical onClick={ () => toggleMenu(item.id)}  className='cursor-pointer'/>
+                                    {viewMoreBtn === item.id && (
                                         <div className="absolute right-5 mt-2 w-40 bg-white shadow-lg rounded-lg z-10 text-[#333333]">
                                             <ul className="p-2 text-xs">
                                                 <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">
-                                                    <Link href={`/dashboard/account_settings/customer/${user.id}`}>View More</Link>
+                                                    <Link href={`/dashboard/orders/frame/${item.id}`}>View Order</Link>
                                                 </li>
-                                                <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Disable</li>
-                                                <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Order History</li>
+                                                {/* <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleModal(item)}>Update Status</li> */}
+                                                <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Assign to vendor</li>
                                             </ul>
                                         </div>
                                     )}
@@ -173,9 +185,16 @@ const Page = () => {
                     {Math.min(currentPage * rowsPerPage, totalRows)} of {totalRows} rows
                 </div>
             </div>
+
+            {/* modal */}
+            {/* {modal && ( */}
+                {/* // <UpdateStatus item={selectedItem} onClose={handleModal}/> */}
+            {/* )} */}
         </div>
     </div>
   )
 }
 
 export default Page
+
+

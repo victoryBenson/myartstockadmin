@@ -13,7 +13,7 @@ import Link from 'next/link'
 import Loader from '@/shared/Loader'
 
 const Page = () => {
-    const {isLoading, isError, users:data} = useAppSelector(state => state.user);
+    const {isLoading, isError, users:data, errorMsg} = useAppSelector(state => state.user);
     const dispatch = useAppDispatch();
     const [viewMoreBtn, setviewMoreBtn] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +34,7 @@ const Page = () => {
     }
 
     if(isError){
-      return <p>Loading...</p>
+      return <p>{errorMsg}</p>
     }
 
     

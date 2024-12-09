@@ -1,6 +1,6 @@
 'use client'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { truncateText } from '@/utils/utils'
+import { highlightMatch, truncateText } from '@/utils/utils'
 import React, { useEffect, useState } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { CiSearch } from 'react-icons/ci'
@@ -8,6 +8,7 @@ import { LuFilter } from 'react-icons/lu';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Link from 'next/link'
 import { fetchVendors } from '@/redux/features/vendor/vendorSlice'
+import Loader from '@/shared/Loader'
 
 const Vendor = () => {
     const {isLoading, isError, vendors:data, errorMsg} = useAppSelector(state => state.vendor);
@@ -27,7 +28,7 @@ const Vendor = () => {
     },[dispatch])
 
     if(isLoading){
-      return <p>Loading...</p>
+      return <Loader/>  
     }
 
     if(isError){
@@ -50,21 +51,21 @@ const Vendor = () => {
         if (currentPage > 1) setCurrentPage(currentPage - 1);
     };
 
-      // Function to highlight matches
-  const highlightMatch = (text: string, query: string) => {
-    if (!query) return text;
+    // Function to highlight matches
+    // const highlightMatch = (text: string, query: string) => {
+    //      if (!query) return text;
 
-    const parts = text.split(new RegExp(`(${query})`, "gi"));
-        return parts.map((part, i) =>
-        part.toLowerCase() === query.toLowerCase() ? (
-            <span key={i} className="bg-orange-300 text-white font-bold">
-            {part}
-            </span>
-        ) : (
-            part
-        )
-        );
-    };
+    //     const parts = text.split(new RegExp(`(${query})`, "gi"));
+    //         return parts.map((part, i) =>
+    //         part.toLowerCase() === query.toLowerCase() ? (
+    //             <span key={i} className="bg-orange-300 text-white font-bold">
+    //             {part}
+    //             </span>
+    //         ) : (
+    //             part
+    //         )
+    //         );
+    // };
 
     // Filtered Data
     const filteredData = displayData.filter((item) =>

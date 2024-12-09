@@ -8,7 +8,8 @@ const initialState: OrderState = {
     isLoading: false,
     isError: false,
     errorMsg: "",
-    orders: []
+    orders: [],
+    orderDetail: null
 };
 
 
@@ -18,6 +19,22 @@ export const FetchOrders = createAsyncThunk(
     async(_, thunkAPI) => {
         try {
             return await orderService.fetchOrders()
+        }catch(error){
+            if (error instanceof Error) {  
+                return thunkAPI.rejectWithValue(error.message);
+            } else {
+            console.error("An unknown error occurred");
+            }
+        }
+    }
+);
+
+//fetchRegisteredUsers
+export const OrderDetails = createAsyncThunk(
+    'orders/fetchOrderDetails',
+    async(id: number, thunkAPI) => {
+        try {
+            return await orderService.orderDetails(id)
         }catch(error){
             if (error instanceof Error) {  
                 return thunkAPI.rejectWithValue(error.message);
@@ -48,6 +65,25 @@ const orderSlice = createSlice({
             console.log(payload)
         })
         .addCase(FetchOrders.rejected, (state, {payload}:PayloadAction<unknown>) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.errorMsg = payload as string;
+            console.log(state.errorMsg)
+        })
+
+
+        // fetchOrderDetails
+        .addCase(OrderDetails.pending, (state) => {
+            state.isLoading = true;
+            state.isError = false;
+            state.errorMsg = "";
+        })
+        .addCase(OrderDetails.fulfilled, (state, {payload}:PayloadAction<OrderProps>) => {
+            state.isLoading = false;
+            state.orderDetail = payload;
+            console.log(payload)
+        })
+        .addCase(OrderDetails.rejected, (state, {payload}:PayloadAction<unknown>) => {
             state.isLoading = false;
             state.isError = true;
             state.errorMsg = payload as string;

@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 
 const Page = () => {
   return (
-   redirect(`/dashboard/orders/digital`)
+   redirect(`/dashboard/orders/frame`)
   )
 }
 

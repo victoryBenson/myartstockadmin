@@ -15,7 +15,7 @@ import { RootState } from "@/redux/store";
 
 
 
-const UserDetails = ({params}: {params: Promise<{ id: number }>;}) => {
+const UserDetails = ({params}: {params: Promise<{ id: number }>}) => {
     const {isLoading, isError, errorMsg, singleUser} = useAppSelector((state: RootState) => state.user)
     const dispatch = useAppDispatch()
     const { id } = React.use(params)

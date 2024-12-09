@@ -1,3 +1,4 @@
+
 export interface AuthState {
     token: string | null;
     isLoading: boolean,
@@ -85,13 +86,33 @@ export interface ContributorState {
 
 
 //orders
-export interface OrderProps {
-    email?: string,
+export interface OrderProps { 
     sku?: string,
     status?: string,
-    description?: string,
     total_amount?: number,
-    date_assigned?: string
+    date_assigned?: string,
+    due_date?: string,
+    id: number,
+    created_at?: string,
+    items?: {
+        id?: number,
+        category?: string,
+        deliverable?: {
+            title?: string,
+            slug?: string,
+            description?: string
+        },
+        assigned_to?: {
+            name?: string,
+            personnel_name?: string
+        }
+    },
+    customer?: {
+        id: number,
+        first_name?: string,
+        last_name?: string,
+        email?: string
+    }
 }
 
 
@@ -99,5 +120,52 @@ export interface OrderState {
     isLoading: boolean,
     isError?: boolean,
     orders: OrderProps[],
+    orderDetail: OrderProps | null
     errorMsg?: string,
 }
+
+// asset management
+export interface AssetProps {
+    id: number,
+    category_id?: string,
+    title?: string,
+    slug?: string,
+    description?: string,
+    status?: string,
+    reason?: string,
+    updated_at: string,
+    pricing?: string,
+    meta?: {
+        author?: {
+            id: number,
+            first_name?: string,
+            last_name?: string,
+            profile_image?: string
+        },
+        category: string,
+        asset_type?: string,
+        images?: {
+            id?: number,
+            public_url: string,
+            cover_image: string,
+            private_url?: string
+        },
+        tags?: {
+            id?: number,
+            name?: string
+        },
+        revenue?: {
+            total_units?: string,
+            total_amount?: string
+        }
+    }
+}
+
+export interface AssetState {
+    isLoading: boolean,
+    isError?: boolean,
+    assets: AssetProps[],
+    assetsDetail: AssetProps | null
+    errorMsg?: string,
+}
+
