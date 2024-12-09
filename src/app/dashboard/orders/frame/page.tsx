@@ -2,14 +2,13 @@
 import { FetchOrders } from '@/redux/features/orders/orderSlice';
 import React, { useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { truncateText } from '@/utils/utils'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { CiSearch } from 'react-icons/ci'
 import { LuFilter } from 'react-icons/lu';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Link from 'next/link'
 import Loader from '@/shared/Loader'
-import UpdateStatus from '@/components/UpdateStatus';
+// import UpdateStatus from '@/components/UpdateStatus';
 
 const Page = () => {
   const dispatch = useAppDispatch();
@@ -18,14 +17,14 @@ const Page = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState("");
-  const [modal, setModal] = useState(false)
-  const [selectedItem, setSelectedItem] = useState()
+//   const [modal, setModal] = useState(false)
+//   const [selectedItem, setSelectedItem] = useState()
 
   
-  const handleModal = (param: undefined) =>{
-    setSelectedItem(param)
-    setModal(!modal)
-  }
+//   const handleModal = (param: undefined) =>{
+//     setSelectedItem(param)
+//     setModal(!modal)
+//   }
 
   const toggleMenu = (id: number) => {
       setviewMoreBtn(viewMoreBtn === id ? null : id);
@@ -141,7 +140,7 @@ const Page = () => {
                                                 <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">
                                                     <Link href={`/dashboard/orders/frame/${item.id}`}>View Order</Link>
                                                 </li>
-                                                <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleModal(item)}>Update Status</li>
+                                                {/* <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleModal(item)}>Update Status</li> */}
                                                 <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Assign to vendor</li>
                                             </ul>
                                         </div>
@@ -188,9 +187,9 @@ const Page = () => {
             </div>
 
             {/* modal */}
-            {modal && (
-                <UpdateStatus item={selectedItem} onClose={handleModal}/>
-            )}
+            {/* {modal && ( */}
+                {/* // <UpdateStatus item={selectedItem} onClose={handleModal}/> */}
+            {/* )} */}
         </div>
     </div>
   )

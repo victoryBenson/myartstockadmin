@@ -8,7 +8,6 @@ import Logo from '@/shared/Logo'
 import icon1 from '../../public/assets/dashboardIcon.png'
 import icon2 from '../../public/assets/orderIcon.png'
 import icon3 from '../../public/assets/wallet-02.png'
-import icon4 from '../../public/assets/store-03.png'
 import icon5 from '../../public/assets/user-group.png'
 import { FaRegCircleUser } from "react-icons/fa6";
 import { RiLogoutCircleRLine } from "react-icons/ri";

@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
 import Image from 'next/image';
 import React, { useState } from 'react'
 import blackman from '../../public/assets/blackman.png'
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Loader from '@/shared/Loader';
-import { updateStatus } from '@/redux/features/asset_management/assetSlice';
+import {updateStatus } from '@/redux/features/asset_management/assetSlice';
 import successIcon from '../../public/assets/success notice.png'
 
 interface ModalProps {
@@ -18,6 +20,7 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
     const [notify, setNotify] = useState(false);
     const [declineModal, setDeclineModal]  = useState(false)
     const [declineReason, setDeclineReason] = useState("")
+    const [error, setError] = useState("")
 
 
     const handleStatusChange = (id: number, status: 'Approved' | 'Declined')=> {
@@ -30,10 +33,15 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
     };
 
     const handleDeclineSubmit = (id: number) => {
+        if(!declineReason.trim()){
+            setError("Please enter your reason before submitting!")
+            return
+        }
         if(declineReason.trim()){
             dispatch(updateStatus({id: id, status: 'Declined', reason: declineReason}));
             setDeclineModal(false)
             setDeclineReason("")
+            onClose()
         }
     };
 
@@ -42,6 +50,9 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
         onClose()
     }
 
+    // const handleFetch = (queryParams: string) => {
+    //     dispatch(FetchAssets(queryParams))
+    // };
 
     if(isLoading){
         return <Loader/>
@@ -111,6 +122,7 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
                     <IoCloseCircleOutline onClick={ () => setDeclineModal(false)} size={30} className='absolute right-4 text-[#B0B0B0] cursor-pointer' />
                     <div className='flex flex-col h-full justify-around items-center py-10'>
                         <p className='pb-5 font-bold text-[#333333] text-2xl'>Decline Request</p>
+                        <span className='text-red-500 text-sm'>{error}</span>
                         <textarea 
                             placeholder='write a reason'
                             value={declineReason}
@@ -120,7 +132,17 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
                         />
                         <div className='gap-4 flex pt-2'>
                             <button onClick={() => setDeclineModal(false)} className='text-[#2F4858] bg-[#D7D7D7] p-3 px-10 rounded-lg'>Cancel</button>
-                            <button onClick={() => {handleDeclineSubmit(item?.id)}} className='bg-[#B00712] text-white p-3 px-10 rounded-lg'>Decline</button>
+                            <button 
+                                onClick={() => {
+                                handleDeclineSubmit(item?.id);
+                                // setActiveTab("approved"); 
+                                // handleFetch("Approved")
+                                }
+                                } 
+                                className='bg-[#B00712] text-white p-3 px-10 rounded-lg'
+                                >
+                                    Decline
+                            </button>
                         </div>
                     </div>
                 </div>

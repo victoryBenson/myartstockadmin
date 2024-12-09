@@ -39,12 +39,12 @@ const Page = ({params}: {params: Promise<{ id: number }>}) => {
   
   return (
     <div className="p-4">
-        <div className="flex items-center text-[#6D6D6D] text-sm"><MdArrowBackIosNew /> <span onClick={() => router.back()} className="text-blue-600 cursor-pointer">Order Management</span>/{data?.user_id}</div>
+        <div className="flex items-center text-[#6D6D6D] text-sm"><MdArrowBackIosNew /> <span onClick={() => router.back()} className="text-blue-600 cursor-pointer">Order Management</span></div>
         <ul className="py-5 space-y-2">
             <li className="text-lg font-bold">Order Details</li>
             <li className="text-xs text-[#3D3D3D]">
                 <span>Order Number <b>{data.sku}</b> </span>
-                <span>{new Date(data.updated_at).toLocaleDateString('default', { day: "2-digit", month:"long", year:"numeric" })}</span>
+                {/* <span>{new Date(data.updated_at).toLocaleDateString('default', { day: "2-digit", month:"long", year:"numeric" })}</span> */}
             </li>
         </ul>
         <div className="flex gap-8">

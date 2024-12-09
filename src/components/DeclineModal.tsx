@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+'use client'
 import Image from 'next/image';
 import React, { useState } from 'react'
 import blackman from '../../public/assets/blackman.png'
@@ -21,7 +23,8 @@ const DeclineModal = ({onClose, item}: ModalProps) => {
 
     const handleStatusChange = (id: number, status: 'Approved' | 'Declined')=> {
         dispatch(updateStatus({id, status}))
-        setNotify(true)
+        // setNotify(true)
+        onClose();
     };
 
 
@@ -65,7 +68,16 @@ const DeclineModal = ({onClose, item}: ModalProps) => {
                     <li className=" text-gray-600">{item?.description}</li>
                     <li>Tags: <span>{item?.meta?.tag?.name} {item?.meta?.tag?.name}</span></li>
                     <li className='flex pt-5 gap-4'>
-                        <button className='flex p-3 px-5 border rounded-lg bg-[#2F4858] text-white  ' onClick={() => {handleStatusChange(item?.id, 'Approved');}}>Approve</button>
+                        <button 
+                            className='flex p-3 px-5 border rounded-lg bg-[#2F4858] text-white  ' 
+                            onClick={() => {
+                                handleStatusChange(item?.id, 'Approved');
+                                setNotify(true);
+
+                            }}
+                            >
+                            Approve
+                        </button>
                         <button className=' cursor-not-allowed flex p-3 px-5 border rounded-lg text-[#2F4858]/20 bg-[#DBDBDB]' disabled onClick={() => {handleStatusChange(item?.id, 'Declined');}}>Decline</button>
                     </li>
                 </ul>
@@ -77,12 +89,20 @@ const DeclineModal = ({onClose, item}: ModalProps) => {
             {
                 notify && (
                     <div className='fixed inset-0 transition-all flex items-center justify-center bg-black bg-opacity-50 z-[99]'>
-                        <div className='bg-white rounded-lg shadow-lg w-1/3 h-[350px] p-6 relative '>
-                            <ul>
-                                <li><Image src={successIcon} alt='image' /></li>
+                        <div className='bg-white rounded-lg shadow-lg w-1/4 h-[350px] p-6 relative flex justify-center items-'>
+                            <ul className='text-center flex flex-col justify-around'>
+                                <li><Image src={successIcon} alt='image'  /></li>
                                 <li>Approved</li>
                                 <li>
-                                    <button onClick={() => handleNotify} className='bg-[#2F4858] text-white'>Done</button>
+                                    <button 
+                                        onClick={
+                                            () => {
+                                                handleNotify();
+                                            }} 
+                                            className='bg-[#2F4858] text-white p-4 w-full rounded'
+                                            >
+                                        Done
+                                    </button>
                                 </li>
                             </ul>
                         </div>
@@ -90,7 +110,7 @@ const DeclineModal = ({onClose, item}: ModalProps) => {
                     </div>
                 )
             }
-        </div>        
+        </div>    
     </div>
   )
 }
