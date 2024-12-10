@@ -86,6 +86,24 @@ export interface ContributorState {
 
 
 //orders
+export interface item {
+    id: number,
+        category: string,
+        type: string,
+        quantity: string,
+        purchase_price: string,
+        status: string,
+        deliverable?: {
+            title: string,
+            slug: string,
+            description?: string
+        },
+        assigned_to?: {
+            name?: string,
+            personnel_name?: string,
+            type?: string
+        }
+}
 export interface OrderProps { 
     sku?: string,
     status?: string,
@@ -93,25 +111,15 @@ export interface OrderProps {
     date_assigned?: string,
     due_date?: string,
     id: number,
-    created_at?: string,
-    items?: {
-        id?: number,
-        category?: string,
-        deliverable?: {
-            title?: string,
-            slug?: string,
-            description?: string
-        },
-        assigned_to?: {
-            name?: string,
-            personnel_name?: string
-        }
-    },
+    created_at: string,
+    payment_type?: string,
+    items?: item[],
     customer?: {
         id: number,
         first_name?: string,
         last_name?: string,
-        email?: string
+        email?: string,
+        phone_number?: string
     }
 }
 

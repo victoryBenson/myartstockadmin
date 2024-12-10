@@ -2,12 +2,12 @@
 'use client'
 import Image from 'next/image';
 import React, { useState } from 'react'
-import blackman from '../../public/assets/blackman.png'
+import blackman from '../../../public/assets/blackman.png'
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Loader from '@/shared/Loader';
 import { updateStatus } from '@/redux/features/asset_management/assetSlice';
-import successIcon from '../../public/assets/success notice.png'
+import successIcon from '../../../public/assets/success notice.png'
 
 interface ModalProps {
     onClose: () => void;

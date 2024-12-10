@@ -2,25 +2,24 @@
 'use client'
 import Image from 'next/image';
 import React, { useState } from 'react'
-import blackman from '../../public/assets/blackman.png'
+import blackman from '../../../public/assets/blackman.png'
 import { IoCloseCircleOutline } from 'react-icons/io5';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Loader from '@/shared/Loader';
-import {updateStatus } from '@/redux/features/asset_management/assetSlice';
-import successIcon from '../../public/assets/success notice.png'
+import { updateStatus } from '@/redux/features/asset_management/assetSlice';
+import successIcon from '../../../public/assets/success notice.png'
 
 interface ModalProps {
     onClose: () => void;
     item: Record<string, any> | null;
   }
 
-const ApprovedModal = ({onClose, item}: ModalProps) => {
+const PendingModal = ({onClose, item}: ModalProps) => {
     const dispatch = useAppDispatch();
     const {isLoading, isError, errorMsg} = useAppSelector(state => state.assets);
     const [notify, setNotify] = useState(false);
     const [declineModal, setDeclineModal]  = useState(false)
     const [declineReason, setDeclineReason] = useState("")
-    const [error, setError] = useState("")
 
 
     const handleStatusChange = (id: number, status: 'Approved' | 'Declined')=> {
@@ -33,26 +32,17 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
     };
 
     const handleDeclineSubmit = (id: number) => {
-        if(!declineReason.trim()){
-            setError("Please enter your reason before submitting!")
-            return
-        }
         if(declineReason.trim()){
             dispatch(updateStatus({id: id, status: 'Declined', reason: declineReason}));
             setDeclineModal(false)
             setDeclineReason("")
-            onClose()
         }
-    };
+    }
 
     const handleNotify = () => {
         setNotify(false)
-        onClose()
     }
 
-    // const handleFetch = (queryParams: string) => {
-    //     dispatch(FetchAssets(queryParams))
-    // };
 
     if(isLoading){
         return <Loader/>
@@ -83,13 +73,13 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
                         <span>Category: Frame</span>
                         <span>Sub-Category: null</span>
                         <span>Upload Date: {new Date(item?.updated_at).toLocaleDateString()}</span>
-                        <span>Status: <i className='text-green-500'>{item?.status}</i></span>
+                        <span>Status: <i className='text-[#FFC107]'>{item?.status}</i></span>
                     </li>
                     <li className=" text-gray-600">{item?.description}</li>
                     <li>Tags: <span>{item?.meta?.tag?.name} {item?.meta?.tag?.name}</span></li>
                     <li className='flex pt-5 gap-4'>
-                        <button className='flex p-3 px-5 border rounded-lg text-[#2F4858]/20 bg-[#DBDBDB] cursor-not-allowed' disabled onClick={() => {handleStatusChange(item?.id, 'Approved');}}>Approve</button>
-                        <button className='flex p-3 px-5 border rounded-lg bg-[#2F4858] text-white' onClick={() => {handleStatusChange(item?.id, 'Declined');}}>Decline</button>
+                        <button className='flex p-3 px-5 border rounded-lg bg-[#2F4858] text-white' onClick={() => {handleStatusChange(item?.id, 'Approved');}}>Approve</button>
+                        <button className='flex p-3 px-5 border rounded-lg text-[#2F4858] bg-[#DBDBDB]' onClick={() => {handleStatusChange(item?.id, 'Declined');}}>Decline</button>
                     </li>
                 </ul>
             </div>
@@ -99,8 +89,8 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
         <div>
             {
                 notify && (
-                    <div className='fixed inset-0 transition-all flex items-center justify-center bg-black bg-opacity-50 z-[99]'>
-                        <div className='bg-white rounded-lg shadow-lg w-1/3 h-[350px] p-6 relative '>
+                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999]'>
+                        <div className='bg-white rounded-lg shadow-lg w-1/3 h-1/3 p-6 relative'>
                             <ul>
                                 <li><Image src={successIcon} alt='image' /></li>
                                 <li>Approved</li>
@@ -122,7 +112,6 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
                     <IoCloseCircleOutline onClick={ () => setDeclineModal(false)} size={30} className='absolute right-4 text-[#B0B0B0] cursor-pointer' />
                     <div className='flex flex-col h-full justify-around items-center py-10'>
                         <p className='pb-5 font-bold text-[#333333] text-2xl'>Decline Request</p>
-                        <span className='text-red-500 text-sm'>{error}</span>
                         <textarea 
                             placeholder='write a reason'
                             value={declineReason}
@@ -132,17 +121,7 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
                         />
                         <div className='gap-4 flex pt-2'>
                             <button onClick={() => setDeclineModal(false)} className='text-[#2F4858] bg-[#D7D7D7] p-3 px-10 rounded-lg'>Cancel</button>
-                            <button 
-                                onClick={() => {
-                                handleDeclineSubmit(item?.id);
-                                // setActiveTab("approved"); 
-                                // handleFetch("Approved")
-                                }
-                                } 
-                                className='bg-[#B00712] text-white p-3 px-10 rounded-lg'
-                                >
-                                    Decline
-                            </button>
+                            <button onClick={() => {handleDeclineSubmit(item?.id)}} className='bg-[#B00712] text-white p-3 px-10 rounded-lg'>Decline</button>
                         </div>
                     </div>
                 </div>
@@ -152,4 +131,4 @@ const ApprovedModal = ({onClose, item}: ModalProps) => {
   )
 }
 
-export default ApprovedModal
+export default PendingModal
