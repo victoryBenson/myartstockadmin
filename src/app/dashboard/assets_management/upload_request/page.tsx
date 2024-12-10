@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
-import ApprovedModal from '@/components/AppprovedModal';
-import DeclineModal from '@/components/DeclineModal';
-import PendingModal from '@/components/PendingModal';
+import ApprovedModal from '@/components/asset/AppprovedModal';
+import DeclineModal from '@/components/asset/DeclineModal';
+import PendingModal from '@/components/asset/PendingModal';
 import { FetchAssets, updateStatus } from '@/redux/features/asset_management/assetSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import Loader from '@/shared/Loader';

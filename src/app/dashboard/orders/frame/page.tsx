@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client'
 import { FetchOrders } from '@/redux/features/orders/orderSlice';
 import React, { useEffect, useState } from 'react'
@@ -8,39 +10,46 @@ import { LuFilter } from 'react-icons/lu';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Link from 'next/link'
 import Loader from '@/shared/Loader'
-// import UpdateStatus from '@/components/UpdateStatus';
+import UpdateStatus from '@/components/order/UpdateStatus';
+
 
 const Page = () => {
   const dispatch = useAppDispatch();
   const {isLoading, isError, errorMsg, orders:data} = useAppSelector(state => state.order)
-  const [viewMoreBtn, setviewMoreBtn] = useState<number | null>(null);
+  const [viewMoreBtn, setViewMoreBtn] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchQuery, setSearchQuery] = useState("");
-//   const [modal, setModal] = useState(false)
-//   const [selectedItem, setSelectedItem] = useState()
+  const [updateStatusModal, setUpdateStatusModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Record<string, any> | null>(null);
 
-  
-//   const handleModal = (param: undefined) =>{
-//     setSelectedItem(param)
-//     setModal(!modal)
-//   }
 
-  const toggleMenu = (id: number) => {
-      setviewMoreBtn(viewMoreBtn === id ? null : id);
-  };
+    const handleStatusUpdate = (param: Record<string, any>) =>{
+        setSelectedItem(param)
+        setUpdateStatusModal(true)
+    };
 
-  useEffect(() => {
-    dispatch(FetchOrders())
-  },[dispatch])
+    const handleCloseStatusModal = () => {
+        setUpdateStatusModal(false);
+        setSelectedItem(null);
+    };
 
-  if(isLoading){
-    return <Loader/>
-  }
+    
+    const toggleMenu = (id: number) => {
+        setViewMoreBtn(viewMoreBtn === id ? null : id);
+    };
 
-  if(isError){
-    return <p>{errorMsg}</p>
-  }
+    useEffect(() => {
+        dispatch(FetchOrders("Frame"))
+    },[dispatch])
+
+    if(isLoading){
+        return <Loader/>
+    }
+
+    if(isError){
+        return <p>{errorMsg}</p>
+    }
 
   
   const totalRows = data.length
@@ -104,10 +113,9 @@ const Page = () => {
                         <th className="py-4 px-4 text-left border-b">S/N</th>
                         <th className="py-4 px-4 text-left border-b">Order Number</th>
                         <th className="py-4 px-4 text-left border-b">Customer Name</th>
-                        <th className="py-4 px-4 text-left border-b">Product Details</th>
                         <th className="py-4 px-4 text-left border-b">Amount</th>
                         <th className="py-4 px-4 text-left border-b">Date</th>
-                        <th className="py-4 px-4 text-left border-b">Assigned To</th>
+                        <th className="py-4 px-4 text-left border-b">Payment Type</th>
                         <th className="py-4 px-4 text-left border-b">Status</th>
                         <th className="py-4 px-4 text-left border-b">Action</th>
                     </tr>
@@ -122,15 +130,11 @@ const Page = () => {
                         return (
                             <tr key={item.id} className='hover:bg-gray-50 text-[#333333] font-normal text-xs'>
                                 <td className='py-2 px-4 border-b'>{index + 1}</td>
-                                <td className='py-2 px-4 border-b flex items-center'>{item.id}</td>
+                                <td className='py-2 px-4 border-b flex items-center text-[#5420A4]'>{item.sku}</td>
                                 <td className='py-2 px-4 border-b'>{item.customer?.first_name}</td>
-                                <td className='py-2 px-4 border-b'>{item?.items?.deliverable?.title}</td>
-                                <td className='py-2 px-4 border-b'>{item.total_amount?.toLocaleString()}</td>
-                                <td className='py-2 px-4 border-b flex flex-col'>
-                                    {/* <span>{new Date(item.created_at).toLocaleDateString()}</span> */}
-                                    {/* <span>{new Date(item.created_at).toLocaleTimeString()}</span> */}
-                                </td>
-                                <td className='py-2 px-4 border-b'>{item.date_assigned ? item.date_assigned : 'null'}</td>
+                                <td className='py-2 px-4 border-b text-[#5420A4]'>{item.total_amount?.toLocaleString()}</td>
+                                <td className='py-2 px-4 border-b'>{new Date(item?.created_at).toLocaleDateString()}</td>
+                                <td className='py-2 px-4 border-b'>{item.payment_type ?? "null"}</td>
                                 <td className='py-2 px-4 border-b'>{item.status}</td>
                                 <td className='py-2 px-4 border-b relative'>
                                     <BsThreeDotsVertical onClick={ () => toggleMenu(item.id)}  className='cursor-pointer'/>
@@ -140,16 +144,15 @@ const Page = () => {
                                                 <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">
                                                     <Link href={`/dashboard/orders/frame/${item.id}`}>View Order</Link>
                                                 </li>
-                                                {/* <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleModal(item)}>Update Status</li> */}
-                                                <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer">Assign to vendor</li>
+                                                <li className="py-1 px-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleStatusUpdate(item)}>Update Status</li>
                                             </ul>
                                         </div>
                                     )}
-                                </td>
-                            </tr>
-                        )
-                    })
-                }
+                                    </td>
+                                </tr>
+                            )
+                        })
+                    }
                 </tbody>
             </table>
             <div className='flex justify-between items-center py-5 text-xs'>
@@ -186,10 +189,10 @@ const Page = () => {
                 </div>
             </div>
 
-            {/* modal */}
-            {/* {modal && ( */}
-                {/* // <UpdateStatus item={selectedItem} onClose={handleModal}/> */}
-            {/* )} */}
+            {/* update order status modal */}
+            {updateStatusModal && (
+                <UpdateStatus item={selectedItem} onClose={handleCloseStatusModal}/>
+            )}
         </div>
     </div>
   )
